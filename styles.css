@@ -867,7 +867,7 @@ h2 {
 }
 
 .team-track article {
-  min-width: clamp(230px, 24vw, 360px);
+  flex: 0 0 clamp(230px, 24vw, 360px);
   scroll-snap-align: start;
 }
 
@@ -898,6 +898,16 @@ h2 {
   font-family: var(--serif);
   font-size: 29px;
   font-weight: 400;
+}
+
+.team-role {
+  max-width: 310px;
+  margin: 8px 0 0;
+  color: #766158;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.035em;
+  line-height: 1.45;
 }
 
 .team-navigation {
@@ -1743,7 +1753,7 @@ footer > p {
   }
 
   .team-track article {
-    min-width: 75vw;
+    flex-basis: 75vw;
   }
 
   .team-navigation {

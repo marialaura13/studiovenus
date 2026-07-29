@@ -60,29 +60,51 @@ serviceItems.forEach((item) => {
 });
 
 if (teamTrack && teamPrevious && teamNext) {
-  const teamScrollAmount = () => {
-    const firstCard = teamTrack.querySelector("article");
-    const trackGap = parseFloat(getComputedStyle(teamTrack).gap) || 0;
-    return firstCard ? firstCard.getBoundingClientRect().width + trackGap : teamTrack.clientWidth * 0.8;
+  const teamCards = [...teamTrack.querySelectorAll("article")];
+
+  const getTeamPositions = () => {
+    const trackRect = teamTrack.getBoundingClientRect();
+    const trackPadding = parseFloat(getComputedStyle(teamTrack).paddingLeft) || 0;
+
+    return teamCards.map(
+      (card) =>
+        card.getBoundingClientRect().left -
+        trackRect.left +
+        teamTrack.scrollLeft -
+        trackPadding,
+    );
+  };
+
+  const scrollTeamTo = (position) => {
+    const maxScroll = Math.max(0, teamTrack.scrollWidth - teamTrack.clientWidth);
+    const target = Math.min(Math.max(position, 0), maxScroll);
+    teamTrack.scrollTo({ left: target, behavior: "smooth" });
   };
 
   const updateTeamArrows = () => {
-    const maxScroll = teamTrack.scrollWidth - teamTrack.clientWidth;
+    const maxScroll = Math.max(0, teamTrack.scrollWidth - teamTrack.clientWidth);
     teamPrevious.disabled = teamTrack.scrollLeft <= 2;
     teamNext.disabled = teamTrack.scrollLeft >= maxScroll - 2;
   };
 
   teamPrevious.addEventListener("click", () => {
-    teamTrack.scrollBy({ left: -teamScrollAmount(), behavior: "smooth" });
+    const positions = getTeamPositions();
+    const previousPosition =
+      [...positions].reverse().find((position) => position < teamTrack.scrollLeft - 4) ?? 0;
+    scrollTeamTo(previousPosition);
   });
 
   teamNext.addEventListener("click", () => {
-    teamTrack.scrollBy({ left: teamScrollAmount(), behavior: "smooth" });
+    const positions = getTeamPositions();
+    const nextPosition =
+      positions.find((position) => position > teamTrack.scrollLeft + 4) ??
+      teamTrack.scrollWidth - teamTrack.clientWidth;
+    scrollTeamTo(nextPosition);
   });
 
   teamTrack.addEventListener("scroll", updateTeamArrows, { passive: true });
-  window.addEventListener("resize", updateTeamArrows);
-  updateTeamArrows();
+  window.addEventListener("resize", () => requestAnimationFrame(updateTeamArrows));
+  requestAnimationFrame(updateTeamArrows);
 }
 
 if (reelVideos.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
