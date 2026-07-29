@@ -60,53 +60,32 @@ serviceItems.forEach((item) => {
 });
 
 if (teamTrack && teamPrevious && teamNext) {
-  const teamCards = [...teamTrack.querySelectorAll("article")];
-  let targetPosition = 0;
-  let manualInteraction = false;
-  let manualScrollTimer;
-
-  const getTeamPositions = () => {
-    const trackRect = teamTrack.getBoundingClientRect();
-    const trackPadding = parseFloat(getComputedStyle(teamTrack).paddingLeft) || 0;
-    const maxScroll = Math.max(0, teamTrack.scrollWidth - teamTrack.clientWidth);
-    const positions = teamCards.map((card) => {
-      const cardPosition =
-        card.getBoundingClientRect().left -
-        trackRect.left +
-        teamTrack.scrollLeft -
-        trackPadding;
-
-      return Math.min(Math.max(Math.round(cardPosition), 0), maxScroll);
-    });
-
-    return positions.filter(
-      (position, index) =>
-        index === 0 || Math.abs(position - positions[index - 1]) > 2,
-    );
-  };
-
-  const nearestPositionIndex = (positions, position) =>
-    positions.reduce(
-      (nearestIndex, candidate, index) =>
-        Math.abs(candidate - position) <
-        Math.abs(positions[nearestIndex] - position)
-          ? index
-          : nearestIndex,
-      0,
-    );
-
   const navigateTeam = (direction) => {
-    const positions = getTeamPositions();
-    if (positions.length < 2) return;
+    const firstCard = teamTrack.querySelector("article");
+    if (!firstCard) return;
 
-    const currentIndex = nearestPositionIndex(positions, targetPosition);
-    const nextIndex =
-      (currentIndex + direction + positions.length) % positions.length;
+    const gap = parseFloat(getComputedStyle(teamTrack).columnGap) || 0;
+    const step = firstCard.getBoundingClientRect().width + gap;
+    const maxScroll = Math.max(0, teamTrack.scrollWidth - teamTrack.clientWidth);
+    const currentPosition = teamTrack.scrollLeft;
+    let targetPosition;
 
-    targetPosition = positions[nextIndex];
-    manualInteraction = false;
-    clearTimeout(manualScrollTimer);
-    teamTrack.scrollTo({ left: targetPosition, behavior: "smooth" });
+    if (direction > 0) {
+      targetPosition =
+        currentPosition >= maxScroll - 2
+          ? 0
+          : Math.min(currentPosition + step, maxScroll);
+    } else {
+      targetPosition =
+        currentPosition <= 2
+          ? maxScroll
+          : Math.max(currentPosition - step, 0);
+    }
+
+    teamTrack.scrollTo({
+      left: Math.round(targetPosition),
+      behavior: "auto",
+    });
   };
 
   teamPrevious.addEventListener("click", () => {
@@ -115,38 +94,6 @@ if (teamTrack && teamPrevious && teamNext) {
 
   teamNext.addEventListener("click", () => {
     navigateTeam(1);
-  });
-
-  const syncBeforeManualScroll = () => {
-    manualInteraction = true;
-    targetPosition = teamTrack.scrollLeft;
-  };
-
-  const finishManualScroll = () => {
-    if (!manualInteraction) return;
-    targetPosition = teamTrack.scrollLeft;
-    manualInteraction = false;
-  };
-
-  teamTrack.addEventListener("pointerdown", syncBeforeManualScroll, {
-    passive: true,
-  });
-  teamTrack.addEventListener("wheel", syncBeforeManualScroll, {
-    passive: true,
-  });
-  teamTrack.addEventListener("keydown", syncBeforeManualScroll);
-  teamTrack.addEventListener("scrollend", finishManualScroll);
-  teamTrack.addEventListener(
-    "scroll",
-    () => {
-      if (!manualInteraction) return;
-      clearTimeout(manualScrollTimer);
-      manualScrollTimer = setTimeout(finishManualScroll, 120);
-    },
-    { passive: true },
-  );
-  window.addEventListener("resize", () => {
-    targetPosition = teamTrack.scrollLeft;
   });
 }
 

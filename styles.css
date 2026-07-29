@@ -854,7 +854,7 @@ h2 {
   overflow-x: auto;
   padding: 0 7vw 20px;
   overscroll-behavior-inline: contain;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   scroll-padding-inline: 7vw;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -869,6 +869,7 @@ h2 {
 .team-track article {
   flex: 0 0 clamp(230px, 24vw, 360px);
   scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .team-track img {
