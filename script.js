@@ -3,8 +3,6 @@ const menuButton = document.querySelector(".menu-toggle");
 const mobileMenu = document.querySelector(".mobile-menu");
 const serviceItems = document.querySelectorAll(".service-item");
 const revealItems = document.querySelectorAll(".reveal");
-const teamTrack = document.querySelector(".team-track");
-const teamNavigation = document.querySelector(".team-navigation");
 const reelVideos = document.querySelectorAll(".reel-preview video");
 
 const updateHeader = () => {
@@ -57,41 +55,6 @@ serviceItems.forEach((item) => {
     }
   });
 });
-
-if (teamTrack && teamNavigation) {
-  teamNavigation.addEventListener("click", (event) => {
-    const button = event.target.closest("[data-team-direction]");
-    if (!button) return;
-
-    event.preventDefault();
-
-    const direction = Number(button.dataset.teamDirection);
-    const styles = getComputedStyle(teamTrack);
-    const horizontalPadding =
-      (parseFloat(styles.paddingLeft) || 0) +
-      (parseFloat(styles.paddingRight) || 0);
-    const pageWidth = Math.max(
-      1,
-      teamTrack.clientWidth - horizontalPadding,
-    );
-    const maxScroll = Math.max(
-      0,
-      teamTrack.scrollWidth - teamTrack.clientWidth,
-    );
-    const current = Math.round(teamTrack.scrollLeft);
-
-    let destination;
-    if (direction > 0) {
-      destination =
-        current >= maxScroll - 2 ? 0 : Math.min(current + pageWidth, maxScroll);
-    } else {
-      destination =
-        current <= 2 ? maxScroll : Math.max(current - pageWidth, 0);
-    }
-
-    teamTrack.scrollLeft = Math.round(destination);
-  });
-}
 
 if (reelVideos.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   const reelObserver = new IntersectionObserver(

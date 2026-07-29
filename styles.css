@@ -877,18 +877,42 @@ h2 {
   display: flex;
   gap: 20px;
   overflow-x: auto;
-  padding: 0 7vw 20px;
+  padding: 0 7vw 28px;
   overscroll-behavior-inline: contain;
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
   scroll-padding-inline: 7vw;
   scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  scrollbar-color: var(--bronze) rgba(155, 103, 68, 0.12);
+  scrollbar-width: thin;
   touch-action: pan-x;
   -webkit-overflow-scrolling: touch;
+  cursor: grab;
 }
 
 .team-track::-webkit-scrollbar {
-  display: none;
+  display: block;
+  height: 12px;
+}
+
+.team-track::-webkit-scrollbar-track {
+  margin-inline: 7vw;
+  border-radius: 999px;
+  background: rgba(155, 103, 68, 0.12);
+}
+
+.team-track::-webkit-scrollbar-thumb {
+  min-width: 90px;
+  border: 3px solid var(--cream);
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--gold), var(--bronze));
+}
+
+.team-track::-webkit-scrollbar-thumb:hover {
+  background: var(--coffee);
+}
+
+.team-track:active {
+  cursor: grabbing;
 }
 
 .team-track article {
@@ -936,64 +960,13 @@ h2 {
   line-height: 1.45;
 }
 
-.team-navigation {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  margin: -42px 0 28px;
-  padding: 0 7vw;
-}
-
 .drag-hint {
-  margin-right: 10px;
+  margin: 25px 7vw 0;
   color: #8f7c72;
   font-size: 11px;
   letter-spacing: 0.12em;
-  text-align: center;
+  text-align: right;
   text-transform: uppercase;
-}
-
-.team-arrow {
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 1px solid rgba(74, 44, 34, 0.22);
-  border-radius: 50%;
-  background: transparent;
-  color: var(--coffee);
-  line-height: 0;
-  cursor: pointer;
-  transition: background 0.3s, color 0.3s, opacity 0.3s, transform 0.3s;
-}
-
-.team-arrow svg {
-  display: block;
-  width: 22px;
-  height: 22px;
-  overflow: visible;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.75;
-}
-
-.team-arrow svg path {
-  vector-effect: non-scaling-stroke;
-}
-
-.team-arrow:hover,
-.team-arrow:focus-visible {
-  background: var(--coffee);
-  color: var(--cream);
-  transform: translateY(-2px);
-}
-
-.team-arrow:active {
-  transform: scale(0.94);
 }
 
 .instagram-section {
@@ -1777,24 +1750,9 @@ footer > p {
     flex-basis: 75vw;
   }
 
-  .team-navigation {
-    justify-content: center;
-    margin: 0 0 24px;
-    padding: 0 20px;
-  }
-
-  .team-navigation .drag-hint {
-    display: none;
-  }
-
-  .team-arrow {
-    width: 48px;
-    height: 48px;
-  }
-
-  .team-arrow svg {
-    width: 21px;
-    height: 21px;
+  .drag-hint {
+    margin: 20px 20px 0;
+    text-align: center;
   }
 
   .instagram-section {
