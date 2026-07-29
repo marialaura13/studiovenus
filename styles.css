@@ -1294,29 +1294,31 @@ footer > p {
 
 @media (max-width: 980px) {
   .site-header {
-    height: 76px;
+    height: 74px;
     grid-template-columns: 1fr auto;
-    padding-inline: 22px;
+    gap: 18px;
+    padding: 8px 18px;
   }
 
   .brand {
-    width: 60px;
-    height: 68px;
+    z-index: 2;
+    width: 54px;
+    height: 58px;
   }
 
   .brand-logo {
     width: auto;
-    height: 66px;
+    height: 56px;
   }
 
   .brand-favicon {
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
   }
 
   .site-header.scrolled .brand {
-    width: 50px;
-    height: 50px;
+    width: 46px;
+    height: 46px;
   }
 
   .desktop-nav,
@@ -1327,16 +1329,34 @@ footer > p {
   .menu-toggle {
     width: 44px;
     height: 44px;
+    position: relative;
+    z-index: 2;
     display: grid;
     place-content: center;
     gap: 6px;
     padding: 0;
-    border: 1px solid currentColor;
+    border: 1px solid rgba(255, 255, 255, 0.72);
     border-radius: 50%;
-    background: transparent;
+    background: rgba(255, 255, 255, 0.08);
     color: inherit;
     line-height: 0;
     cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition:
+      border-color 0.3s,
+      background 0.3s,
+      transform 0.3s;
+  }
+
+  .site-header.scrolled .menu-toggle {
+    border-color: rgba(36, 23, 19, 0.22);
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .menu-toggle:hover,
+  .menu-toggle:focus-visible {
+    background: rgba(255, 255, 255, 0.18);
+    transform: scale(1.04);
   }
 
   .menu-toggle span {
@@ -1359,36 +1379,116 @@ footer > p {
 
   .mobile-menu {
     position: fixed;
-    z-index: -1;
+    z-index: 1;
     inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 22px;
-    background: var(--ink);
+    gap: clamp(14px, 3.2vh, 25px);
+    min-height: 100dvh;
+    padding: 104px 24px 44px;
+    overflow-y: auto;
+    background:
+      radial-gradient(circle at 84% 14%, rgba(200, 155, 91, 0.2), transparent 34%),
+      linear-gradient(145deg, #2b1a15, var(--ink) 64%);
     color: white;
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.35s;
+    transition:
+      opacity 0.35s ease,
+      visibility 0s linear 0.35s;
   }
 
   .mobile-menu.open {
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
+    transition-delay: 0s;
   }
 
   .mobile-menu a {
+    position: relative;
+    display: block;
+    padding: 4px 16px;
     font-family: var(--serif);
-    font-size: 40px;
+    font-size: clamp(34px, 9vw, 46px);
+    line-height: 1.16;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.35s ease,
+      transform 0.35s ease,
+      color 0.25s;
   }
 
-  .site-header:has(.mobile-menu.open) {
+  .mobile-menu.open a {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-menu.open a:nth-child(1) {
+    transition-delay: 0.08s;
+  }
+
+  .mobile-menu.open a:nth-child(2) {
+    transition-delay: 0.12s;
+  }
+
+  .mobile-menu.open a:nth-child(3) {
+    transition-delay: 0.16s;
+  }
+
+  .mobile-menu.open a:nth-child(4) {
+    transition-delay: 0.2s;
+  }
+
+  .mobile-menu.open a:nth-child(5) {
+    transition-delay: 0.24s;
+  }
+
+  .mobile-menu a:last-child {
+    margin-top: 10px;
+    padding: 12px 22px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  body.menu-open .site-header {
+    height: 74px;
+    border-color: rgba(255, 255, 255, 0.12);
+    background: transparent;
     color: white;
+    box-shadow: none;
+    backdrop-filter: none;
   }
 
-  .site-header:has(.mobile-menu.open) .brand img {
+  body.menu-open .site-header .brand {
+    width: 54px;
+    height: 58px;
+  }
+
+  body.menu-open .site-header .brand-logo {
+    opacity: 1;
+    transform: scale(1);
     filter: brightness(0) invert(1);
+  }
+
+  body.menu-open .site-header .brand-favicon {
+    opacity: 0;
+    transform: scale(0.78) rotate(-8deg);
+  }
+
+  body.menu-open .menu-toggle {
+    border-color: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.08);
   }
 
   .hero-copy {

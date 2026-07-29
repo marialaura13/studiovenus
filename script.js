@@ -32,6 +32,16 @@ mobileMenu.querySelectorAll("a").forEach((link) => {
   });
 });
 
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && mobileMenu.classList.contains("open")) {
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute("aria-label", "Abrir menu");
+    mobileMenu.classList.remove("open");
+    document.body.classList.remove("menu-open");
+    menuButton.focus();
+  }
+});
+
 serviceItems.forEach((item) => {
   const button = item.querySelector("button");
   button.addEventListener("click", () => {
