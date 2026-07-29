@@ -959,19 +959,14 @@ h2 {
   vector-effect: non-scaling-stroke;
 }
 
-.team-arrow:hover:not(:disabled),
+.team-arrow:hover,
 .team-arrow:focus-visible {
   background: var(--coffee);
   color: var(--cream);
   transform: translateY(-2px);
 }
 
-.team-arrow:disabled {
-  opacity: 0.28;
-  cursor: not-allowed;
-}
-
-.team-arrow:active:not(:disabled) {
+.team-arrow:active {
   transform: scale(0.94);
 }
 

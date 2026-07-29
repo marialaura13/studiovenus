@@ -81,13 +81,15 @@ if (teamTrack && teamPrevious && teamNext) {
     teamTrack.scrollTo({ left: target, behavior: "smooth" });
   };
 
-  const updateTeamArrows = () => {
-    const maxScroll = Math.max(0, teamTrack.scrollWidth - teamTrack.clientWidth);
-    teamPrevious.disabled = teamTrack.scrollLeft <= 2;
-    teamNext.disabled = teamTrack.scrollLeft >= maxScroll - 2;
-  };
-
   teamPrevious.addEventListener("click", () => {
+    const maxScroll = Math.max(0, teamTrack.scrollWidth - teamTrack.clientWidth);
+    const isAtStart = teamTrack.scrollLeft <= 4;
+
+    if (isAtStart) {
+      scrollTeamTo(maxScroll);
+      return;
+    }
+
     const positions = getTeamPositions();
     const previousPosition =
       [...positions].reverse().find((position) => position < teamTrack.scrollLeft - 4) ?? 0;
@@ -95,16 +97,20 @@ if (teamTrack && teamPrevious && teamNext) {
   });
 
   teamNext.addEventListener("click", () => {
+    const maxScroll = Math.max(0, teamTrack.scrollWidth - teamTrack.clientWidth);
+    const isAtEnd = teamTrack.scrollLeft >= maxScroll - 4;
+
+    if (isAtEnd) {
+      scrollTeamTo(0);
+      return;
+    }
+
     const positions = getTeamPositions();
     const nextPosition =
       positions.find((position) => position > teamTrack.scrollLeft + 4) ??
-      teamTrack.scrollWidth - teamTrack.clientWidth;
+      maxScroll;
     scrollTeamTo(nextPosition);
   });
-
-  teamTrack.addEventListener("scroll", updateTeamArrows, { passive: true });
-  window.addEventListener("resize", () => requestAnimationFrame(updateTeamArrows));
-  requestAnimationFrame(updateTeamArrows);
 }
 
 if (reelVideos.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
