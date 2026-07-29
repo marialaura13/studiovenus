@@ -902,21 +902,30 @@ h2 {
   height: 52px;
   display: grid;
   place-items: center;
+  padding: 0;
   border: 1px solid rgba(74, 44, 34, 0.22);
   border-radius: 50%;
   background: transparent;
   color: var(--coffee);
+  line-height: 0;
   cursor: pointer;
   transition: background 0.3s, color 0.3s, opacity 0.3s, transform 0.3s;
 }
 
 .team-arrow svg {
-  width: 21px;
+  display: block;
+  width: 22px;
+  height: 22px;
+  overflow: visible;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1.7;
+  stroke-width: 1.75;
+}
+
+.team-arrow svg path {
+  vector-effect: non-scaling-stroke;
 }
 
 .team-arrow:hover:not(:disabled),
@@ -1283,30 +1292,36 @@ footer > p {
   }
 
   .menu-toggle {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     display: grid;
     place-content: center;
-    gap: 7px;
+    gap: 6px;
+    padding: 0;
     border: 1px solid currentColor;
     border-radius: 50%;
     background: transparent;
+    color: inherit;
+    line-height: 0;
     cursor: pointer;
   }
 
   .menu-toggle span {
-    width: 19px;
-    height: 1px;
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    border-radius: 999px;
     background: currentColor;
-    transition: 0.3s;
+    transform-origin: center;
+    transition: transform 0.3s;
   }
 
   .menu-toggle[aria-expanded="true"] span:first-child {
-    transform: translateY(4px) rotate(45deg);
+    transform: translateY(3.75px) rotate(45deg);
   }
 
   .menu-toggle[aria-expanded="true"] span:last-child {
-    transform: translateY(-4px) rotate(-45deg);
+    transform: translateY(-3.75px) rotate(-45deg);
   }
 
   .mobile-menu {
@@ -1603,6 +1618,11 @@ footer > p {
   .team-arrow {
     width: 48px;
     height: 48px;
+  }
+
+  .team-arrow svg {
+    width: 21px;
+    height: 21px;
   }
 
   .instagram-section {
