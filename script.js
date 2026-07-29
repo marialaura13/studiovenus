@@ -4,8 +4,7 @@ const mobileMenu = document.querySelector(".mobile-menu");
 const serviceItems = document.querySelectorAll(".service-item");
 const revealItems = document.querySelectorAll(".reveal");
 const teamTrack = document.querySelector(".team-track");
-const teamPrevious = document.querySelector(".team-prev");
-const teamNext = document.querySelector(".team-next");
+const teamNavigation = document.querySelector(".team-navigation");
 const reelVideos = document.querySelectorAll(".reel-preview video");
 
 const updateHeader = () => {
@@ -59,41 +58,38 @@ serviceItems.forEach((item) => {
   });
 });
 
-if (teamTrack && teamPrevious && teamNext) {
-  const navigateTeam = (direction) => {
-    const firstCard = teamTrack.querySelector("article");
-    if (!firstCard) return;
+if (teamTrack && teamNavigation) {
+  teamNavigation.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-team-direction]");
+    if (!button) return;
 
-    const gap = parseFloat(getComputedStyle(teamTrack).columnGap) || 0;
-    const step = firstCard.getBoundingClientRect().width + gap;
-    const maxScroll = Math.max(0, teamTrack.scrollWidth - teamTrack.clientWidth);
-    const currentPosition = teamTrack.scrollLeft;
-    let targetPosition;
+    event.preventDefault();
 
+    const direction = Number(button.dataset.teamDirection);
+    const styles = getComputedStyle(teamTrack);
+    const horizontalPadding =
+      (parseFloat(styles.paddingLeft) || 0) +
+      (parseFloat(styles.paddingRight) || 0);
+    const pageWidth = Math.max(
+      1,
+      teamTrack.clientWidth - horizontalPadding,
+    );
+    const maxScroll = Math.max(
+      0,
+      teamTrack.scrollWidth - teamTrack.clientWidth,
+    );
+    const current = Math.round(teamTrack.scrollLeft);
+
+    let destination;
     if (direction > 0) {
-      targetPosition =
-        currentPosition >= maxScroll - 2
-          ? 0
-          : Math.min(currentPosition + step, maxScroll);
+      destination =
+        current >= maxScroll - 2 ? 0 : Math.min(current + pageWidth, maxScroll);
     } else {
-      targetPosition =
-        currentPosition <= 2
-          ? maxScroll
-          : Math.max(currentPosition - step, 0);
+      destination =
+        current <= 2 ? maxScroll : Math.max(current - pageWidth, 0);
     }
 
-    teamTrack.scrollTo({
-      left: Math.round(targetPosition),
-      behavior: "auto",
-    });
-  };
-
-  teamPrevious.addEventListener("click", () => {
-    navigateTeam(-1);
-  });
-
-  teamNext.addEventListener("click", () => {
-    navigateTeam(1);
+    teamTrack.scrollLeft = Math.round(destination);
   });
 }
 
